@@ -1,0 +1,47 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+
+model User {
+  id String @id @default(uuid())
+  name String 
+  email String @unique
+  password String
+  phone String @unique
+  consultant Consultant[]
+  session Session[]
+}
+
+
+model Consultant {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  phone String @unique
+  AboutMe String
+  certificate String
+  user User[]
+  session Session[]
+}
+
+model Session {
+  id String @id @default(uuid())
+  time String
+  // date String 
+  duration String
+  price String
+  // sessionType String
+  user_id String
+  consultant_id String
+  user User @relation(fields: [user_id],references: [id])
+  consultant Consultant @relation(fields: [consultant_id],references: [id])  
+}
